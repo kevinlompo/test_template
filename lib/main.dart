@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
         primaryColor:  const Color.fromARGB(255, 49, 189, 179),
       ),
       home: const MyHomePage(title: 'Templates Demo'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
