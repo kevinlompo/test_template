@@ -1,6 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:share/share.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 class V1 extends StatefulWidget {
   const V1({Key? key}) : super(key: key);
@@ -10,6 +14,8 @@ class V1 extends StatefulWidget {
 }
 
 class _V1State extends State<V1> {
+  WidgetsToImageController controller = WidgetsToImageController();
+  Uint8List? bytes;
   @override
   Widget build(BuildContext context) {
     // VARIABLES
@@ -157,95 +163,120 @@ class _V1State extends State<V1> {
             },
           ),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Image.asset(
-                    'images/snake.png',
-                    width: 600,
-                    height: 240,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 250),
-                    child: Container(
-                        height:
-                        Theme.of(context).textTheme.headlineMedium!.fontSize! *
-                            1.0 +
-                            17.0,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(226, 239, 235, 0.6),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.only(top: 8.0),
-                        // margin: const EdgeInsets.only(left: 40, right: 40),
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Text('RECRUTE',
-                              style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.blue.shade900)
-                            /*style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: Colors.blue.shade900))*/
-                          ),
-                        )
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 220),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(199, 235, 232, 0.9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: Theme.of(context).textTheme.headlineMedium!.fontSize! *
-                          1.0 +
-                          17.0,
-                      padding: const EdgeInsets.only(top: 8.0),
-                      margin: const EdgeInsets.only(left: 40, right: 40),
-                      // color: const Color.fromRGBO(199, 235, 232, 0.9),
-                      alignment: Alignment.center,
-                      child: Text('CLINIQUE DES ROSIERS',
-                          style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.blue.shade900)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 320),
-                    child: titleSection,
-                  ),
-                  const SizedBox(height: 10,),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 350),
-                    child: textSection,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 560),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 49, 189, 179),
-                        shape: const StadiumBorder(),
-                      ),
-                      onPressed: () {
-                        print('button pressed!');
-                      },
-                      child:  Text('Plus d\'informations', style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.w500),),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 610),
-                    child: buttonSection,
-                  ),
-                ]
-            ),
-          ),
+        body: WidgetsToImage(
+          controller: controller,
+          child: cardWidget(titleSection, buttonSection, textSection),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 49, 189, 179),
+          child: const Icon(Icons.share),
+          onPressed: () async {
+            _shareImage();
+            // Share button implementation goes here.
+            print(bytes.toString());
+          },
         ),
       ),
     );
+  }
+  Widget cardWidget(Widget titleSection, Widget buttonSection, Widget textSection) {
+    return SingleChildScrollView(
+      child: Center(
+        child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Image.asset(
+                'images/snake.png',
+                width: MediaQuery.of(context).size.width,
+                height: 240,
+                fit: BoxFit.cover,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 250),
+                child: Container(
+                    height:
+                    Theme.of(context).textTheme.headlineMedium!.fontSize! *
+                        1.0 +
+                        17.0,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(226, 239, 235, 0.6),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.only(top: 8.0),
+                    // margin: const EdgeInsets.only(left: 40, right: 40),
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Text('RECRUTE',
+                          style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.blue.shade900)
+                        /*style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: Colors.blue.shade900))*/
+                      ),
+                    )
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 220),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(199, 235, 232, 0.9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  height: Theme.of(context).textTheme.headlineMedium!.fontSize! *
+                      1.0 +
+                      17.0,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  margin: const EdgeInsets.only(left: 40, right: 40),
+                  // color: const Color.fromRGBO(199, 235, 232, 0.9),
+                  alignment: Alignment.center,
+                  child: Text('CLINIQUE DES ROSIERS',
+                      style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.blue.shade900)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 320),
+                child: titleSection,
+              ),
+              const SizedBox(height: 10,),
+              Padding(
+                padding: const EdgeInsets.only(top: 350),
+                child: textSection,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 560),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 49, 189, 179),
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: () {
+                    print('button pressed!');
+                  },
+                  child:  Text('Plus d\'informations', style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.w500),),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.only(top: 610),
+                child: buttonSection,
+              ),
+            ]
+        ),
+      ),
+    );
+  }
+  _shareImage() async {
+    final bytes = await controller.capture();
+    /* setState(() {
+      this.bytes = bytes;
+    });*/
+    final directory = await getTemporaryDirectory();
+    final imagePath = "${directory.path}/image.png";
+    File(imagePath).writeAsBytesSync(bytes!);
+    await Share.shareFiles([imagePath], text: 'Check out this image!');
   }
 }
 
