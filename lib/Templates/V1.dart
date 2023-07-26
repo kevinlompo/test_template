@@ -16,10 +16,21 @@ class V1 extends StatefulWidget {
 class _V1State extends State<V1> {
   WidgetsToImageController controller = WidgetsToImageController();
   Uint8List? bytes;
+  late TextEditingController clinique2;
+  late FocusNode cliniqueFocusNode2;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    clinique2 = TextEditingController();
+    cliniqueFocusNode2 = FocusNode();
+  }
   @override
   Widget build(BuildContext context) {
     // VARIABLES
     Color color = const Color.fromARGB(255, 49, 189, 179);
+
 
     // WIDGETS & METHODES
     Widget titleSection = Container(
@@ -232,8 +243,22 @@ class _V1State extends State<V1> {
                   margin: const EdgeInsets.only(left: 40, right: 40),
                   // color: const Color.fromRGBO(199, 235, 232, 0.9),
                   alignment: Alignment.center,
-                  child: Text('CLINIQUE DES ROSIERS',
-                      style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.blue.shade900)),
+                  child:
+                  TextFormField(
+                      textAlign: TextAlign.center,
+                      focusNode: cliniqueFocusNode2,
+                      controller: clinique2,
+                      decoration: InputDecoration(
+                          hintText: cliniqueFocusNode2.hasFocus ? '' : 'CLINIQUE DES ROSIERS',
+                          hintStyle: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Colors.blue.shade900,
+                          ),
+                          border: InputBorder.none
+                      ),
+                      style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.blue.shade900)
+                  )
                 ),
               ),
               Padding(

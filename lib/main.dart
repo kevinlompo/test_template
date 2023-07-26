@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Padding(
                                 padding: EdgeInsets.only(left: buttonWidth, right: buttonWidth),
                                 child:  Row(children: [
-                                  Icon(Icons.arrow_forward_ios_sharp, size: 25, color: Colors.white,),
+                                  const Icon(Icons.arrow_forward_ios_sharp, size: 25, color: Colors.white,),
                                   Center(child: Text('${Templates[index]}', style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20,),
                                   ))
                                 ],)),

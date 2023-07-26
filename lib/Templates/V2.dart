@@ -124,7 +124,10 @@ class _V2State extends State<V2> {
                       width: 5,
                     ),
                     const SizedBox(width: 5,),
-                    FittedBox(child: Text(' DES QUE POSSIBLE', style: GoogleFonts.montserrat(fontWeight: FontWeight.w400,fontSize: 13, color: const Color.fromARGB(255, 26, 8, 107)), softWrap: true,)),
+                    FittedBox(
+                        child:
+                        Text(
+                          ' DES QUE POSSIBLE', style: GoogleFonts.montserrat(fontWeight: FontWeight.w400,fontSize: 13, color: const Color.fromARGB(255, 26, 8, 107)), softWrap: true,)),
                   ],
                 ),
               ),
@@ -189,22 +192,22 @@ class _V2State extends State<V2> {
                   // margin: const EdgeInsets.only(left: 40, right: 40),
                   alignment: Alignment.center,
                   child: Padding(
-                      padding: const EdgeInsets.only(top: 25),
+                      padding: const EdgeInsets.only(top: 25, left: 5, right: 5),
                       child: Column(
                         children: [
                           Container(
-                            height: 30,
+                            height: 28,
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(255, 208, 101, 70),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              padding: const EdgeInsets.only(top: 10),
                               child: TextFormField(
                                   textAlign: TextAlign.center,
                                   controller: candidat,
                                   focusNode: candidatFocusNode2,
-                                  decoration: InputDecoration(
+                                  decoration:InputDecoration(
                                       hintText: candidatFocusNode2.hasFocus ? '' : 'ASSISTANT(E) VETERINAIRE',
                                       hintStyle: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w600,
@@ -305,6 +308,32 @@ class _V2State extends State<V2> {
                         ),
                         border: InputBorder.none
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Champ vide",
+                                style: GoogleFonts.montserrat(fontSize: 20, fontWeight: FontWeight.w600),),
+                              content: Text(
+                                "Ce champ doit-être rempli.",
+                                style: GoogleFonts.montserrat(fontSize: 16, fontWeight: FontWeight.w400),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.w600, fontSize: 18, color: const Color.fromARGB(255, 49, 189, 179))
                 ),
                 /*style: Theme.of(context)
